@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#047857">
+<title>Latihan UASA Tahun 4 — Nabhan</title>
+<style>
+:root{--green:#047857;--deep:#064e3b;--gold:#fbbf24;--ink:#172033;--muted:#64748b;--line:#dbe4e8;--paper:#fff;--bg:#f3f7f6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(120deg,var(--deep),var(--green));color:white;padding:22px 16px}
+.wrap{max-width:900px;margin:auto;padding:0 16px}.headrow{display:flex;justify-content:space-between;align-items:center;gap:12px}.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#d1fae5;font-weight:700}h1{font-size:clamp(1.25rem,3vw,1.8rem);line-height:1.2;margin:4px 0}header p{margin:6px 0 0;color:#d1fae5;font-size:.92rem}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:700}button:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}.share{background:var(--gold);color:#422006;white-space:nowrap}
+main{padding:22px 0 38px}.tabs{display:flex;gap:8px;flex-wrap:wrap;background:white;border:1px solid var(--line);padding:8px;border-radius:16px;margin-bottom:16px}.tabs button{flex:1;background:#eef2f4;color:#334155}.tabs button.active{background:var(--green);color:white}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,4vw,26px);box-shadow:0 5px 20px #0f172a08;margin-bottom:16px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.pill{display:inline-block;background:#ecfdf5;color:var(--deep);border:1px solid #a7f3d0;border-radius:8px;padding:4px 9px;font-size:.78rem;font-weight:800}.muted{color:var(--muted);font-size:.9rem}.track{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:10px}.bar{height:100%;width:2%;background:var(--green);transition:width .2s}
+h2{font-size:1.25rem;line-height:1.4;margin:12px 0}.arabic{direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri",serif;font-size:1.8rem;background:#f0fdf4;border:1px solid #bbf7d0;padding:12px 16px;border-radius:12px;margin:14px 0}
+.options{display:grid;gap:10px;margin-top:18px}.option{display:flex;text-align:left;align-items:center;gap:12px;border:2px solid var(--line);background:white;color:var(--ink);font-weight:600}.option:hover{border-color:#6ee7b7}.option.selected{border-color:var(--green);background:#ecfdf5}.letter{display:grid;place-items:center;flex:0 0 30px;height:30px;border:1px solid #cbd5e1;border-radius:50%;font-size:.8rem}.option.selected .letter{background:var(--green);color:white;border-color:var(--green)}
+.feedback{margin-top:18px;padding:14px;border-radius:12px;border:1px solid}.good{background:#ecfdf5;border-color:#a7f3d0}.bad{background:#fff1f2;border-color:#fecdd3}.feedback strong{display:block;margin-bottom:4px}.nav{display:flex;justify-content:space-between;gap:10px;margin-top:24px;padding-top:18px;border-top:1px solid #edf2f5}.secondary{background:#eef2f4;color:#334155}.primary{background:var(--green);color:white}.secondary:disabled{opacity:.4;cursor:not-allowed}
+.note{font-size:.86rem;color:#475569;background:#fffbeb;border:1px solid #fde68a;padding:13px;border-radius:12px;margin-top:14px}.scoregrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.score{padding:18px;background:#f8fafc;border:1px solid var(--line);border-radius:14px}.score .big{font-size:1.7rem;font-weight:850;color:var(--green)}.hidden{display:none!important}.modal{position:fixed;inset:0;background:#0f172acc;display:grid;place-items:center;padding:18px;z-index:5}.modalbox{background:white;border-radius:18px;padding:22px;max-width:460px;width:100%}.modalbox h2{margin-top:0}.modalactions{display:grid;gap:10px}.modalactions button{width:100%}footer{text-align:center;color:#64748b;font-size:.8rem;padding:18px}
+@media(max-width:520px){.headrow{align-items:flex-start}.share{padding:9px 11px}.scoregrid{grid-template-columns:1fr}.nav button{font-size:.9rem;padding:10px}}
+</style>
+</head>
+<body>
+<header><div class="wrap headrow"><div><div class="eyebrow">Latihan kendiri • Tahun 4</div><h1>UASA: Imlak Jawi & Tilawah Al-Quran</h1><p>Latihan interaktif untuk Nabhan dan rakan-rakan</p></div><button class="share" id="shareTop">↗ Kongsi</button></div></header>
+<main class="wrap">
+<nav class="tabs" aria-label="Pilih modul"><button class="active" id="tabJawi">✍️ Imlak Jawi</button><button id="tabTilawah">📖 Tilawah Al-Quran</button><button id="tabSummary">🏆 Keputusan</button></nav>
+<section id="progress" class="card"><div class="row"><span id="subjectPill" class="pill">IMLAK JAWI</span><span class="muted" id="counter">Soalan 1 daripada 50</span></div><div class="track"><div id="bar" class="bar"></div></div></section>
+<section id="quiz" class="card"><div class="muted" id="topic">Topik</div><h2 id="question">Memuatkan soalan…</h2><div id="arabic" class="arabic" lang="ar"></div><div id="options" class="options"></div><div id="feedback" class="feedback hidden" aria-live="polite"></div><div class="nav"><button class="secondary" id="prev">← Sebelum</button><button class="primary" id="next">Seterusnya →</button></div></section>
+<section id="summary" class="card hidden"><div style="text-align:center"><div style="font-size:2.6rem">🏆</div><h2>Keputusan Latihan Nabhan</h2><p class="muted">Markah dikira berdasarkan soalan yang telah dijawab. Soalan kosong tidak dikira sebagai salah.</p></div><div class="scoregrid"><div class="score"><div class="muted">Imlak Jawi</div><div class="big" id="jScore">0 / 50</div><div class="muted" id="jPct">0% • 0 dijawab</div></div><div class="score"><div class="muted">Tilawah Al-Quran</div><div class="big" id="tScore">0 / 50</div><div class="muted" id="tPct">0% • 0 dijawab</div></div></div><div class="note"><b>Nota ketepatan silibus:</b> Ini bahan ulang kaji umum, bukan kertas rasmi UASA. Skop sebenar yang diuji bergantung pada kandungan yang telah diajar dan panduan sekolah. Semak ejaan Jawi dengan buku teks/rujukan DBP dan hukum bacaan dengan guru Pendidikan Islam.</div><div class="nav"><button class="secondary" id="backQuiz">Kembali ke latihan</button><button class="primary" id="reset">Cuba semula</button></div></section>
+<div class="note"><b>Petua:</b> Jawab dahulu sebelum melihat penerangan. Gunakan butang “Keputusan” untuk melihat markah semasa.</div>
+</main>
+<footer>Latihan ulang kaji • Tidak menggantikan buku teks atau bimbingan guru</footer>
+<div id="shareModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="shareTitle"><div class="modalbox"><div class="row"><h2 id="shareTitle">Kongsi latihan</h2><button class="secondary" id="closeShare" aria-label="Tutup">✕</button></div><p class="muted">Pautan hanya boleh dibuka oleh orang lain selepas fail ini dimuat naik ke hosting awam.</p><div class="modalactions"><button class="primary" id="wa">Kongsi melalui WhatsApp</button><button class="secondary" id="tg">Kongsi melalui Telegram</button><button class="secondary" id="copy">Salin pautan halaman</button></div><p id="shareStatus" class="muted" aria-live="polite"></p></div></div>
+<script>
+/* Bank soalan latihan. Kandungan ialah latihan contoh dan perlu dipadankan dengan tajuk yang telah diajar. */
+const jawiItems = [
+["Pilih ejaan Jawi yang betul bagi perkataan “sekolah”.","سکوله",["سکوله","سکاله","سکولهء","سکولا"],0,"Ejaan kata tunggal","Semak bentuk ejaan ini dengan buku teks Jawi yang digunakan di sekolah."],
+["Pilih ejaan Jawi bagi perkataan “guru”.","ݢورو",["ݢورو","ݢرو","ݢور","ݢوروه"],0,"Ejaan kata tunggal","Huruf ݢ digunakan untuk bunyi g dalam ejaan Jawi Melayu."],
+["Pilih ejaan Jawi bagi perkataan “buku”.","بوکو",["بوکو","بکو","بوکوء","بوک"],0,"Ejaan kata tunggal","Padankan bunyi vokal dalam perkataan dengan ejaan Jawi yang dipelajari."],
+["Perkataan “cerita” dieja dengan betul sebagai…","چريتا",["چرتا","چريتا","چريتو","جريتا"],1,"Ejaan kata tunggal","Perhatikan huruf چ bagi bunyi c dan huruf vokal dalam cerita."],
+["Pilih ejaan Jawi bagi perkataan “membaca”.","ممباچ",["ممباچ","منباچ","مباچ","ممباچا"],0,"Imbuhan awalan","Perkataan ini mengandungi imbuhan awalan mem-."],
+["Pilih ejaan Jawi yang betul bagi “berlari”.","برلاري",["برلاري","بارلاري","بيرلاري","برلري"],0,"Imbuhan awalan","Kenal pasti imbuhan ber- sebelum kata dasar lari."],
+["Pilih ejaan Jawi bagi perkataan “pakaian”.","ڤاکاين",["ڤاکاين","ڤاکان","ڤاکاءن","ڤاکاينن"],0,"Kata berimbuhan","Semak bentuk kata terbitan ini dengan kaedah ejaan yang diajar."],
+["Pilih ejaan Jawi bagi perkataan “pensel”.","ڤينسيل",["ڤينسيل","ڤينسل","ڤنسیل","ڤينسيله"],0,"Kata pinjaman","Kata pinjaman perlu mengikut bentuk ejaan Jawi yang diselaraskan."],
+["Pilih ejaan Jawi bagi perkataan “masjid”.","مسجد",["مسجد","ماسيجد","مسجيد","مسجت"],0,"Kata pinjaman Arab","Perkataan ini menggunakan ejaan asal yang lazim bagi kata pinjaman Arab."],
+["Pilih ejaan Jawi bagi perkataan “wuduk”.","وضوء",["وضوء","ودوق","وودوق","وضوق"],0,"Kata pinjaman Arab","Istilah wuduk lazimnya mengekalkan ejaan Arab وضوء."],
+["Pilih ejaan Jawi bagi perkataan “solat”.","صلاة",["سولات","صلوة","صلاة","سلاة"],2,"Kata pinjaman Arab","Istilah solat ditulis صلاة dalam bahasa Arab."],
+["Pilih ejaan Jawi bagi perkataan “akhirat”.","آخرت",["آخرت","اخيرات","اخرت","آخيرة"],0,"Kata pinjaman Arab","Semak ejaan istilah agama dengan senarai kata pinjaman dalam buku teks."],
+["Perkataan “iman” dieja sebagai…","ايمان",["امان","ايمان","ايمن","ايماءن"],1,"Kata pinjaman Arab","Iman ialah kata pinjaman Arab yang lazim dieja ايمان."],
+["Pilih ejaan Jawi bagi perkataan “Islam”.","اسلام",["اسلام","اسلم","اي سلام","اسلامه"],0,"Kata pinjaman Arab","Ejaan Islam dalam tulisan Arab ialah اسلام."],
+["Pilih ejaan Jawi bagi perkataan “waktu”.","وقت",["وقت","واقتو","وقتو","وکت"],0,"Kata pinjaman Arab","Perhatikan bentuk ejaan kata waktu yang berasal daripada bahasa Arab."],
+["Pilih ejaan Jawi bagi perkataan “bendera”.","بنديرا",["بنديرا","بندرا","بنديره","بانديرا"],0,"Ejaan kata tunggal","Padankan bunyi suku kata dengan huruf vokal yang sesuai."],
+["Pilih ejaan Jawi bagi perkataan “keluarga”.","کلوارݢ",["کلوارݢ","کلوارڬا","کلوارݢا","کلوݢا"],0,"Ejaan kata tunggal","Perhatikan urutan suku kata ke-lu-ar-ga."],
+["Pilih ejaan Jawi bagi perkataan “sekolah rendah”.","سکوله رنده",["سکوله رنده","سکوله رنداه","سکولا رنده","سکوله رندهه"],0,"Frasa","Frasa ditulis dengan jarak antara perkataan."],
+["Pilih ejaan Jawi bagi perkataan “ibu”.","ايبو",["ايبو","ابو","ايب","ايبوه"],0,"Ejaan kata tunggal","Pilih bentuk yang mewakili bunyi vokal dalam perkataan ibu."],
+["Pilih ejaan Jawi bagi perkataan “bapa”.","باڤا",["باڤا","باڤ","بڤا","باڤه"],0,"Ejaan kata tunggal","Huruf ڤ mewakili bunyi p dalam ejaan Jawi."],
+["Pilih ejaan Jawi bagi perkataan “makan”.","ماکن",["ماکن","مکن","ماکان","ماکنن"],0,"Ejaan kata tunggal","Bentuk ini mewakili bunyi ma-kan."],
+["Pilih ejaan Jawi bagi perkataan “minum”.","مينوم",["مينوم","منوم","مينم","مينومه"],0,"Ejaan kata tunggal","Perhatikan vokal dalam suku kata mi-num."],
+["Pilih ejaan Jawi bagi perkataan “rumah”.","رومه",["رومه","رماه","رمح","رومهء"],0,"Ejaan kata tunggal","Bandingkan pilihan dengan ejaan yang diajar dalam buku teks."],
+["Pilih ejaan Jawi bagi perkataan “pantai”.","ڤنتاي",["ڤنتاي","ڤانتاي","ڤنتي","ڤنتاءي"],0,"Ejaan kata tunggal","Perhatikan bunyi pan-tai."],
+["Pilih ejaan Jawi bagi perkataan “taman”.","تامن",["تامن","تامان","طامن","تمن"],0,"Ejaan kata tunggal","Pilih bentuk ejaan yang sepadan dengan sebutan taman."],
+["Pilih ejaan Jawi bagi perkataan “pasar”.","ڤاسر",["ڤاسر","ڤاصر","ڤاسار","ڤسر"],0,"Ejaan kata tunggal","Perhatikan bunyi pa-sar."],
+["Pilih ejaan Jawi bagi perkataan “kereta”.","کريتا",["کريتا","کرتا","کاريتا","کريتو"],0,"Ejaan kata tunggal","Padankan bunyi ke-re-ta dengan ejaan yang sesuai."],
+["Pilih ejaan Jawi bagi perkataan “basikal”.","باسيکل",["باسيکل","باسکل","باسيکال","باسيقل"],0,"Kata pinjaman","Kata pinjaman perlu disemak berdasarkan pedoman ejaan Jawi."],
+["Pilih ejaan Jawi bagi perkataan “telefon”.","تيليفون",["تيليفون","تليفن","تيليفن","تيليفونن"],0,"Kata pinjaman","Perhatikan padanan vokal dalam perkataan telefon."],
+["Pilih ejaan Jawi bagi perkataan “komputer”.","کومڤوتر",["کومڤوتر","کومڤوتر","کومڤوتير","کومڤتر"],0,"Kata pinjaman","Perkataan moden seperti komputer ialah kata pinjaman."],
+["Pilih ejaan Jawi bagi perkataan “hari”.","هاري",["هاري","هري","هارئ","حاري"],0,"Ejaan kata tunggal","Perhatikan huruf vokal dalam perkataan hari."],
+["Pilih ejaan Jawi bagi perkataan “Isnin”.","اثنين",["اثنين","اسنين","ايسنين","اثنينن"],0,"Nama hari","Nama hari ini lazimnya ditulis dengan ejaan pinjaman Arab اثنين."],
+["Pilih ejaan Jawi bagi perkataan “Jumaat”.","جمعة",["جمعة","جومعة","جمات","جمعات"],0,"Nama hari","Ejaan Jumaat berasal daripada bahasa Arab الجمعة."],
+["Pilih ejaan Jawi bagi perkataan “doa”.","دعاء",["دعاء","دوا","دوعا","دعاة"],0,"Kata pinjaman Arab","Perkataan doa lazimnya dieja دعاء."],
+["Pilih ejaan Jawi bagi perkataan “ilmu”.","علم",["علم","ايلم","ايلمو","عيلم"],0,"Kata pinjaman Arab","Ilmu ialah kata pinjaman Arab yang ditulis علم."],
+["Pilih ejaan Jawi bagi perkataan “murid”.","موريد",["موريد","مورد","موريدء","مريد"],0,"Ejaan kata tunggal","Semak padanan vokal dalam ejaan ini dengan buku teks."],
+["Pilih ejaan Jawi bagi perkataan “bilik”.","بيليق",["بيليق","بليق","بيلک","بيليک"],0,"Ejaan kata tunggal","Perhatikan bunyi bi-lik."],
+["Pilih ejaan Jawi bagi perkataan “meja”.","ميجا",["ميجا","مجا","ميجاء","مايجا"],0,"Kata pinjaman","Pilih ejaan yang paling tepat untuk perkataan meja."],
+["Pilih ejaan Jawi bagi perkataan “tingkap”.","تيڠکڤ",["تيڠکڤ","تيڠکڤ","تيڠکڤه","تيڠک"],0,"Ejaan kata tunggal","Huruf ڠ mewakili bunyi ng."],
+["Pilih ejaan Jawi bagi perkataan “sayang”.","سايڠ",["سايڠ","ساين","سايڠڠ","سيڠ"],0,"Ejaan kata tunggal","Huruf ڠ digunakan pada hujung perkataan sayang."],
+["Pilih ejaan Jawi bagi perkataan “panjang”.","ڤنجڠ",["ڤنجڠ","ڤانجڠ","ڤنجان","ڤنجڠه"],0,"Ejaan kata tunggal","Perhatikan bunyi pan-jang dan huruf ڠ."],
+["Pilih ejaan Jawi bagi perkataan “cantik”.","چنتيق",["چنتيق","چانتيک","جنتيق","چنتک"],0,"Ejaan kata tunggal","Huruf چ mewakili bunyi c."],
+["Pilih ejaan Jawi bagi perkataan “hujan”.","هوجن",["هوجن","حوجن","هوجان","هجن"],0,"Ejaan kata tunggal","Pilih ejaan yang sepadan dengan sebutan hu-jan."],
+["Pilih ejaan Jawi bagi perkataan “awan”.","اون",["اون","اوان","ااون","اونن"],0,"Ejaan kata tunggal","Perhatikan bunyi awan."],
+["Pilih ejaan Jawi bagi perkataan “bunga”.","بوڠا",["بوڠا","بوڠ","بونݢا","بوڠه"],0,"Ejaan kata tunggal","Huruf ڠ mewakili bunyi ng dalam bunga."],
+["Pilih ejaan Jawi bagi perkataan “pokok”.","ڤوکوق",["ڤوکوق","ڤوکک","ڤوکوک","ڤوقوق"],0,"Ejaan kata tunggal","Semak bentuk akhir perkataan dengan pedoman ejaan Jawi sekolah."],
+["Pilih ejaan Jawi bagi perkataan “buah”.","بواه",["بواه","بوه","بوا","بواهه"],0,"Ejaan kata tunggal","Perhatikan bunyi buah."],
+["Pilih ejaan Jawi bagi perkataan “sungai”.","سوڠاي",["سوڠاي","سوڠي","سوڠايه","سوڠايي"],0,"Ejaan kata tunggal","Huruf ڠ mewakili bunyi ng dalam sungai."],
+["Pilih ejaan Jawi bagi perkataan “negara”.","نݢارا",["نݢارا","نيݢارا","نݢره","نݢاراا"],0,"Ejaan kata tunggal","Perhatikan urutan suku kata ne-ga-ra."],
+["Pilih ejaan Jawi bagi perkataan “Malaysia”.","مليسيا",["مليسيا","مليسا","مالياسيا","مليسيه"],0,"Nama khas","Nama negara perlu ditulis dengan bentuk ejaan yang konsisten."]
+];
+const tilawahItems = [
+["Nun sakinah bertemu huruf ت dalam bacaan مِنْ تَحْتِهَا. Apakah hukumnya?","مِنْ تَحْتِهَا",["Ikhfa’ hakiki","Iqlab","Idgham maal ghunnah","Izhar halqi"],0,"Nun sakinah dan tanwin","Nun sakinah bertemu ت termasuk huruf ikhfa’ hakiki."],
+["Mad asli (mad tabi‘i) dibaca sepanjang…","قَالَ",["2 harakat","4 harakat","5 harakat","6 harakat"],0,"Hukum mad","Mad asli dibaca dua harakat."],
+["Huruf manakah termasuk huruf qalqalah?","قُطْبُ جَدٍ",["ق","س","م","و"],0,"Qalqalah","Huruf qalqalah ialah ق ط ب ج د."],
+["Apakah maksud tanda waqaf م yang lazim digunakan dalam mushaf?","م",["Waqaf lazim: berhenti","Mesti sambung","Boleh pilih tanpa panduan","Ulang dari awal"],0,"Tanda waqaf","Tanda م menandakan waqaf lazim; berhenti pada tempat itu."],
+["Mim sakinah bertemu mim dalam لَهُمْ مَا. Apakah hukumnya?","لَهُمْ مَا",["Idgham mithlain syafawi","Ikhfa’ syafawi","Izhar syafawi","Iqlab"],0,"Mim sakinah","Mim sakinah bertemu mim dibaca idgham mithlain syafawi dengan dengung."],
+["Nun sakinah bertemu ر. Apakah hukum bacaannya?","مِنْ رَبِّهِمْ",["Idgham bila ghunnah","Idgham maal ghunnah","Ikhfa’ hakiki","Iqlab"],0,"Nun sakinah dan tanwin","Nun sakinah bertemu ر ialah idgham bila ghunnah."],
+["Nun sakinah bertemu ي. Apakah hukum bacaannya?","مَنْ يَعْمَلْ",["Idgham maal ghunnah","Idgham bila ghunnah","Izhar halqi","Iqlab"],0,"Nun sakinah dan tanwin","Huruf ي termasuk huruf idgham maal ghunnah: ي ن م و."],
+["Nun sakinah bertemu ب. Apakah hukum bacaannya?","مِنْ بَعْدِ",["Iqlab","Ikhfa’ hakiki","Izhar halqi","Idgham bila ghunnah"],0,"Nun sakinah dan tanwin","Nun sakinah atau tanwin bertemu ب dibaca iqlab."],
+["Nun sakinah bertemu ء. Apakah hukum bacaannya?","مَنْ آمَنَ",["Izhar halqi","Ikhfa’ hakiki","Iqlab","Idgham maal ghunnah"],0,"Nun sakinah dan tanwin","Hamzah ialah huruf halqi; nun dibaca jelas."],
+["Berapa harakat mad wajib muttasil biasanya dibaca dalam riwayat Hafs yang diajar di Malaysia?","جَاءَ",["4 atau 5 harakat","2 harakat sahaja","6 harakat sahaja","1 harakat"],0,"Hukum mad","Dalam amalan bacaan Hafs yang lazim diajar, mad wajib muttasil dipanjangkan 4 atau 5 harakat; ikut panduan guru."],
+["Huruf qalqalah ialah…","—",["ق ط ب ج د","ء ه ع ح غ خ","ي ن م و ل ر","ص ذ ث ك ج"],0,"Qalqalah","Huruf qalqalah dihimpunkan dalam قُطْبُ جَدٍ."],
+["Mim sakinah bertemu ب. Apakah hukumnya?","تَرْمِيهِمْ بِحِجَارَةٍ",["Ikhfa’ syafawi","Idgham mithlain","Izhar syafawi","Iqlab"],0,"Mim sakinah","Mim sakinah bertemu ب dibaca ikhfa’ syafawi dengan dengung."],
+["Mim sakinah bertemu huruf selain م dan ب, secara umum hukumnya…","هُمْ فِيهَا",["Izhar syafawi","Ikhfa’ syafawi","Idgham mithlain","Iqlab"],0,"Mim sakinah","Mim sakinah dibaca jelas apabila bertemu huruf selain م dan ب."],
+["Tanda waqaf قلي bermaksud…","قلى",["Berhenti lebih utama","Menyambung lebih utama","Tidak boleh berhenti","Wajib mengulang"],0,"Tanda waqaf","قلى menunjukkan berhenti lebih utama."],
+["Tanda waqaf صلى bermaksud…","صلى",["Menyambung lebih utama","Berhenti lebih utama","Wajib berhenti","Tidak boleh membaca"],0,"Tanda waqaf","صلى menunjukkan menyambung bacaan lebih utama."],
+["Mad ‘arid lissukun berlaku apabila…","الْعَالَمِينَ۝",["Berhenti menyebabkan huruf akhir menjadi sukun selepas huruf mad","Ada tasydid pada setiap huruf","Nun bertemu ba","Mim bertemu mim"],0,"Hukum mad","Mad ‘arid lissukun berlaku ketika waqaf selepas huruf mad dan huruf akhir menjadi sukun."],
+["Mad badal contohnya ialah…","آمَنُوا",["آمَنُوا","مِنْ بَعْدِ","مَنْ يَقُولُ","لَهُمْ مَا"],0,"Hukum mad","Mad badal berlaku apabila hamzah diikuti huruf mad dalam satu kalimah."],
+["Bacaan ghunnah berkaitan dengan bunyi dengung pada huruf…","نّ مّ",["ن dan م bersabdu","ل dan ر","ق dan ط","ا dan و sahaja"],0,"Ghunnah","Nun dan mim bersabdu dibaca dengan dengung."],
+["Apakah hukum isti‘azah sebelum membaca al-Quran?","أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",["Memohon perlindungan Allah daripada syaitan","Mengakhiri bacaan","Tanda waqaf","Nama hukum mad"],0,"Adab tilawah","Isti‘azah dibaca untuk memohon perlindungan Allah sebelum tilawah."],
+["Apakah yang dimaksudkan dengan basmalah?","بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",["Membaca Bismillahirrahmanirrahim","Membaca Alhamdulillah","Membaca takbir","Berhenti seketika"],0,"Adab tilawah","Basmalah ialah lafaz بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ."],
+["Apakah maksud waqaf ketika membaca al-Quran?","—",["Berhenti seketika pada tempat tertentu","Membaca dengan laju","Mengulang semua ayat","Membaca tanpa melihat"],0,"Adab tilawah","Waqaf bermaksud berhenti pada tempat tertentu semasa bacaan."],
+["Apakah maksud ibtida’ dalam tilawah?","—",["Memulakan bacaan semula","Memanjangkan semua huruf","Menyembunyikan huruf","Membaca tanpa henti"],0,"Adab tilawah","Ibtida’ bermaksud memulakan bacaan, termasuk selepas berhenti."],
+["Apabila nun sakinah bertemu ل, hukum tajwidnya ialah…","مِنْ لَدُنْهُ",["Idgham bila ghunnah","Idgham maal ghunnah","Iqlab","Ikhfa’ hakiki"],0,"Nun sakinah dan tanwin","Nun sakinah bertemu ل termasuk idgham bila ghunnah."],
+["Apabila nun sakinah bertemu م, hukum tajwidnya ialah…","مِنْ مَالٍ",["Idgham maal ghunnah","Idgham bila ghunnah","Izhar halqi","Iqlab"],0,"Nun sakinah dan tanwin","Nun sakinah bertemu م termasuk idgham maal ghunnah."],
+["Apabila nun sakinah bertemu خ, hukum tajwidnya ialah…","مِنْ خَيْرٍ",["Izhar halqi","Ikhfa’ hakiki","Iqlab","Idgham maal ghunnah"],0,"Nun sakinah dan tanwin","خ ialah huruf halqi, maka nun dibaca jelas."],
+["Apabila nun sakinah bertemu ف, hukum tajwidnya ialah…","مِنْ فَضْلِ",["Ikhfa’ hakiki","Iqlab","Izhar halqi","Idgham bila ghunnah"],0,"Nun sakinah dan tanwin","ف termasuk dalam 15 huruf ikhfa’ hakiki."],
+["Apakah hukum tajwid bagi tanwin bertemu ب?","سَمِيعٌ بَصِيرٌ",["Iqlab","Izhar halqi","Idgham bila ghunnah","Ikhfa’ syafawi"],0,"Nun sakinah dan tanwin","Tanwin bertemu ب ditukar bunyi kepada mim tersembunyi dengan dengung."],
+["Mad wajib muttasil berlaku apabila huruf mad bertemu hamzah…","جَاءَ",["Dalam satu kalimah","Dalam dua kalimah sahaja","Hanya di awal ayat","Selepas tanda waqaf sahaja"],0,"Hukum mad","Mad wajib muttasil berlaku apabila huruf mad dan hamzah berada dalam satu kalimah."],
+["Mad jaiz munfasil berlaku apabila huruf mad di hujung kalimah bertemu hamzah di…","إِنَّا أَعْطَيْنَاكَ",["Awal kalimah berikutnya","Kalimah yang sama sahaja","Akhir surah sahaja","Huruf sukun sahaja"],0,"Hukum mad","Mad jaiz munfasil melibatkan dua kalimah berasingan."],
+["Huruf manakah bukan huruf qalqalah?","—",["س","ق","ط","ب"],0,"Qalqalah","Huruf س bukan huruf qalqalah."],
+["Apakah cara bacaan huruf qalqalah apabila sukun?","—",["Bunyi lantunan yang jelas tanpa menambah baris","Dengung panjang 6 harakat","Dibaca senyap","Sentiasa dipanjangkan 4 harakat"],0,"Qalqalah","Qalqalah menghasilkan lantunan pada huruf ق ط ب ج د yang sukun."],
+["Apakah maksud tajwid?","—",["Membaca al-Quran dengan memberikan hak dan sifat huruf","Membaca secepat mungkin","Menghafal terjemahan sahaja","Menulis ayat dalam rumi"],0,"Asas tajwid","Tajwid membimbing sebutan huruf dan hukum bacaan dengan betul."],
+["Apakah adab yang baik ketika membaca al-Quran?","—",["Menjaga kebersihan dan menghormati mushaf","Meletakkan mushaf di lantai tanpa keperluan","Berbual ketika orang membaca","Bermain sambil membaca"],0,"Adab tilawah","Antara adab tilawah ialah menjaga kebersihan dan menghormati mushaf."],
+["Apakah yang perlu dilakukan jika tidak pasti sebutan sesuatu ayat?","—",["Rujuk guru atau bacaan yang sahih","Agak sahaja sebutannya","Tinggalkan semua tanda baris","Ubah sebutan mengikut kehendak"],0,"Kemahiran tilawah","Rujuk guru yang berkelayakan untuk membetulkan sebutan."],
+["Nun sakinah bertemu و. Apakah hukumnya?","مِنْ وَالٍ",["Idgham maal ghunnah","Idgham bila ghunnah","Iqlab","Izhar halqi"],0,"Nun sakinah dan tanwin","و ialah salah satu huruf idgham maal ghunnah."],
+["Nun sakinah bertemu ع. Apakah hukumnya?","مِنْ عِلْمٍ",["Izhar halqi","Ikhfa’ hakiki","Iqlab","Idgham maal ghunnah"],0,"Nun sakinah dan tanwin","ع ialah huruf halqi, maka nun dibaca jelas."],
+["Tanwin bertemu ت. Apakah hukum bacaannya?","عَلِيمٌ تَوَّابٌ",["Ikhfa’ hakiki","Iqlab","Izhar halqi","Idgham bila ghunnah"],0,"Nun sakinah dan tanwin","ت termasuk huruf ikhfa’ hakiki."],
+["Mad asli terdapat pada kalimah قَالَ kerana…","قَالَ",["Huruf mad alif didahului fathah","Hamzah selepas huruf mad dalam satu kalimah","Nun bertemu ba","Mim bersabdu"],0,"Hukum mad","Alif mad didahului baris fathah dan dibaca dua harakat."],
+["Apakah tanda asas untuk mengenal pasti nun sakinah?","نْ",["Nun dengan tanda sukun","Mim bersabdu","Alif tanpa baris","Lam dengan tasydid"],0,"Asas tajwid","Nun sakinah ialah huruf ن yang bertanda sukun."],
+["Apakah maksud tanwin?","ـٌ ـٍ ـً",["Dua baris yang menghasilkan bunyi nun di hujung","Tanda berhenti wajib","Huruf mad","Tanda qalqalah"],0,"Asas tajwid","Tanwin ialah tanda dua baris yang menghasilkan bunyi nun sakinah."],
+["Apakah hukum mim sakinah bertemu و?","عَلَيْهِمْ وَلَا",["Izhar syafawi","Ikhfa’ syafawi","Idgham mithlain","Iqlab"],0,"Mim sakinah","Mim sakinah bertemu و dibaca izhar syafawi."],
+["Apakah hukum mim sakinah bertemu ف?","هُمْ فِيهَا",["Izhar syafawi","Ikhfa’ syafawi","Idgham mithlain","Iqlab"],0,"Mim sakinah","Mim sakinah bertemu ف dibaca izhar syafawi."],
+["Apakah tujuan membaca al-Quran secara tartil?","—",["Membaca dengan tertib, jelas dan tidak tergesa-gesa","Menghabiskan bacaan secepat mungkin","Mengabaikan makhraj huruf","Membaca tanpa berhenti langsung"],0,"Adab tilawah","Tartil menekankan bacaan yang teratur, jelas dan cermat."],
+["Apakah maksud makhraj huruf?","—",["Tempat keluar sebutan huruf","Panjang bacaan mad","Tanda berhenti","Maksud terjemahan ayat"],0,"Asas tajwid","Makhraj ialah tempat keluarnya sebutan huruf."],
+["Apakah yang dimaksudkan dengan sifat huruf?","—",["Ciri bunyi yang ada pada sesuatu huruf","Bilangan ayat surah","Maksud waqaf","Nama pembaca"],0,"Asas tajwid","Sifat huruf menerangkan ciri bunyi ketika huruf dilafazkan."],
+["Apabila membaca al-Quran, bacaan yang betul perlu mengutamakan…","—",["Sebutan huruf dan hukum tajwid","Kelajuan semata-mata","Suara kuat sahaja","Mengikut melodi tanpa menjaga huruf"],0,"Kemahiran tilawah","Utamakan sebutan dan hukum bacaan yang betul."],
+["Apakah maksud tilawah al-Quran?","—",["Membaca atau melafazkan ayat al-Quran","Menyalin semua ayat dalam rumi","Membaca buku sejarah","Mengira bilangan huruf sahaja"],0,"Asas al-Quran","Tilawah bermaksud membaca al-Quran."],
+["Apakah tindakan yang sesuai apabila sampai pada tanda waqaf dan makna ayat memerlukan perhatian?","—",["Ikut tanda waqaf dan bimbingan guru","Berhenti di tengah perkataan","Potong huruf terakhir","Sentiasa sambung tanpa melihat tanda"],0,"Tanda waqaf","Ikut tanda waqaf yang sesuai dan belajar tempat berhenti daripada guru."],
+["Apakah maksud tartil ketika membaca al-Quran?","—",["Membaca dengan teratur, jelas dan cermat","Membaca secepat mungkin","Meninggalkan semua hukum tajwid","Membaca tanpa menyebut huruf dengan jelas"],0,"Adab tilawah","Tartil menekankan bacaan yang teratur dan jelas."],
+["Antara berikut, yang manakah cara terbaik membetulkan bacaan al-Quran?","—",["Mendengar dan berlatih bersama guru yang mahir","Meneka sebutan sendiri","Mengabaikan tanda baris","Menukar bunyi huruf yang sukar"],0,"Kemahiran tilawah","Bimbingan guru membantu membetulkan makhraj dan hukum bacaan."]
+];
+function normalize(items,subject){
+  const list=items.map((x,i)=>({q:x[0],ar:x[1],opts:x[2],a:x[3],topic:x[4],why:x[5],id:i+1}));
+  // Keep exactly 50 items per module; any added review items are clearly labelled as revision prompts.
+  while(list.length<50){const x=list[list.length%items.length];list.push({...x,id:list.length+1,q:"Latihan ulang kaji: "+x.q,topic:"Ulang kaji — "+x.topic});}
+  return list.slice(0,50);
+}
+const bank={jawi:normalize(jawiItems,"jawi"),tilawah:normalize(tilawahItems,"tilawah")};
+let subject="jawi",index={jawi:0,tilawah:0},answers={jawi:Array(50).fill(null),tilawah:Array(50).fill(null)};
+const $=id=>document.getElementById(id);
+function render(){
+ const q=bank[subject][index[subject]],a=answers[subject][index[subject]];
+ $("subjectPill").textContent=subject==="jawi"?"IMLAK JAWI":"TILAWAH AL-QURAN";
+ $("counter").textContent=`Soalan ${index[subject]+1} daripada 50`;
+ $("bar").style.width=((index[subject]+1)/50*100)+"%";
+ $("topic").textContent="Topik: "+q.topic;$("question").textContent=q.q;
+ $("arabic").textContent=q.ar||"";$("arabic").classList.toggle("hidden",!q.ar||q.ar==="—");
+ $("options").replaceChildren();
+ q.opts.forEach((opt,i)=>{const b=document.createElement("button");b.className="option"+(a===i?" selected":"");const letter=document.createElement("span");letter.className="letter";letter.textContent=String.fromCharCode(65+i);const label=document.createElement("span");label.textContent=opt;b.append(letter,label);b.onclick=()=>{answers[subject][index[subject]]=i;render()};$("options").append(b)});
+ const f=$("feedback");f.className="feedback hidden";
+ if(a!==null){const ok=a===q.a;f.className="feedback "+(ok?"good":"bad");const title=document.createElement("strong");title.textContent=ok?"✓ Jawapan tepat":"✗ Jawapan belum tepat — jawapan latihan: "+String.fromCharCode(65+q.a)+". "+q.opts[q.a];const desc=document.createElement("span");desc.textContent=q.why;f.replaceChildren(title,desc)}
+ $("prev").disabled=index[subject]===0;
+ $("next").textContent=index[subject]===49?"Lihat keputusan →":"Seterusnya →";
+ ["tabJawi","tabTilawah","tabSummary"].forEach(id=>$(id).classList.remove("active"));$(subject==="jawi"?"tabJawi":"tabTilawah").classList.add("active");
+}
+function switchTo(s){subject=s;$("summary").classList.add("hidden");$("quiz").classList.remove("hidden");$("progress").classList.remove("hidden");render()}
+function showSummary(){
+ $("quiz").classList.add("hidden");$("progress").classList.add("hidden");$("summary").classList.remove("hidden");
+ $("tabJawi").classList.remove("active");$("tabTilawah").classList.remove("active");$("tabSummary").classList.add("active");
+ for(const s of ["jawi","tilawah"]){let done=0,correct=0;answers[s].forEach((a,i)=>{if(a!==null){done++;if(a===bank[s][i].a)correct++}});const pct=done?Math.round(correct/done*100):0;
+ $(s==="jawi"?"jScore":"tScore").textContent=`${correct} / 50`;$ (s==="jawi"?"jPct":"tPct").textContent=`${pct}% ketepatan • ${done}/50 dijawab`}
+}
+$("tabJawi").onclick=()=>switchTo("jawi");$("tabTilawah").onclick=()=>switchTo("tilawah");$("tabSummary").onclick=showSummary;
+$("prev").onclick=()=>{if(index[subject]>0){index[subject]--;render()}};
+$("next").onclick=()=>{if(index[subject]<49){index[subject]++;render()}else showSummary()};
+$("backQuiz").onclick=()=>switchTo(subject);
+$("reset").onclick=()=>{answers={jawi:Array(50).fill(null),tilawah:Array(50).fill(null)};index={jawi:0,tilawah:0};switchTo("jawi")};
+function openShare(){ $("shareModal").classList.remove("hidden");$("shareStatus").textContent=""}
+$("shareTop").onclick=openShare;$("closeShare").onclick=()=>$("shareModal").classList.add("hidden");
+$("wa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent("Jom buat latihan UASA Tahun 4: Imlak Jawi dan Tilawah Al-Quran! "+location.href),"_blank","noopener");
+$("tg").onclick=()=>window.open("https://t.me/share/url?url="+encodeURIComponent(location.href)+"&text="+encodeURIComponent("Latihan UASA Tahun 4: Imlak Jawi dan Tilawah Al-Quran"),"_blank","noopener");
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText(location.href);$("shareStatus").textContent="Pautan disalin."}catch(e){$("shareStatus").textContent="Salin URL daripada bar alamat pelayar: "+location.href}};
+$("shareModal").addEventListener("click",e=>{if(e.target===$("shareModal"))$("shareModal").classList.add("hidden")});
+render();
+</script>
+</body></html>
